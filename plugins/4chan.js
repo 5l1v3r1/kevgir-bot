@@ -1,6 +1,7 @@
 const rp = require('request-promise-native')
 
-const rule = RegExp('(?:https?:\\/\\/)?(i\\.4cdn\\.org\\/gif\\/(\\d+)\\.webm)')
+// https://i.4cdn.org/b/1570732453655.webm
+const rule = RegExp('(?:https?:\\/\\/)?(i\\.4cdn\\.org\\/\\w+\\/(\\d+)\\.webm)')
 
 const test = (url) => {
   if (rule.test(url)) { return true } else { return false }
