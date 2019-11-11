@@ -22,7 +22,6 @@ const update = () => {
   let ytdl
   try {
     ytdl = execSync(`youtube-dl -U`, { encoding: 'utf8' }).toString()
-    console.log('UPDATE:', ytdl)
   } catch (err) {
     console.log(err)
   }
