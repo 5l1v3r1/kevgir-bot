@@ -9,6 +9,7 @@ require('dotenv').config()
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN)
 
 const getMarkup = (text, value) => {
+  if (!value.startsWith('http')) { value = `http://\n${value}` }
   const keyboard = Markup.inlineKeyboard([
     Markup.urlButton(text, value),
     Markup.callbackButton('Sil', 'delete')
@@ -43,6 +44,7 @@ bot.on('text', async (ctx) => {
     const updateResult = await kevgir.update()
     if (updateResult) {
       ctx.reply('Tamam.', Extra.markup(getMarkup('Detay', updateResult)))
+      return
     }
   }
 
