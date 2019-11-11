@@ -38,6 +38,14 @@ bot.on('text', async (ctx) => {
     return
   }
 
+  // /update command
+  else if (command && command === '/update') {
+    const updateResult = await kevgir.update()
+    if (updateResult) {
+      ctx.reply('Tamam.', Extra.markup(getMarkup('Detay', updateResult)))
+    }
+  }
+
   // Ignore if message has no urls
   if (!url) { return }
 
@@ -45,14 +53,6 @@ bot.on('text', async (ctx) => {
   if (command && command === '/force') {
     mediaUrl = await kevgir.getMediaYTDL(url)
     if (mediaUrl) { sendMedia(ctx, mediaUrl) } else { ctx.reply('Zor.', Extra.markup(getMarkup('Link', url))) }
-  }
-
-  // /update command
-  else if (command && command === '/update') {
-    const updateResult = await kevgir.update()
-    if (updateResult) {
-      ctx.reply('Tamam.', Extra.markup(getMarkup('Detay', updateResult)))
-    }
   }
 
   // /url or /link command
