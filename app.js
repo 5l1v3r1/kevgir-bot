@@ -8,9 +8,9 @@ require('dotenv').config()
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN)
 
-const getMarkup = (url) => {
+const getMarkup = (text, value) => {
   const keyboard = Markup.inlineKeyboard([
-    Markup.urlButton('Link', url),
+    Markup.urlButton(text, value),
     Markup.callbackButton('Sil', 'delete')
   ])
   return keyboard
@@ -34,7 +34,7 @@ bot.on('text', async (ctx) => {
 
   // Handle ping command
   if (command && command === '/bot') {
-    ctx.reply(';)', Extra.markup(getMarkup('http://akrepnalan.com')))
+    ctx.reply(';)', Extra.markup(getMarkup('Link', 'http://akrepnalan.com')))
     return
   }
 
@@ -44,7 +44,15 @@ bot.on('text', async (ctx) => {
   // /force command
   if (command && command === '/force') {
     mediaUrl = await kevgir.getMediaYTDL(url)
-    if (mediaUrl) { sendMedia(ctx, mediaUrl) } else { ctx.reply('Zor.', Extra.markup(getMarkup(url))) }
+    if (mediaUrl) { sendMedia(ctx, mediaUrl) } else { ctx.reply('Zor.', Extra.markup(getMarkup('Link', url))) }
+  }
+
+  // /update command
+  else if (command && command === '/update') {
+    const updateResult = await kevgir.update()
+    if (updateResult) {
+      ctx.reply('Tamam.', Extra.markup(getMarkup('Detay', updateResult)))
+    }
   }
 
   // /url or /link command
@@ -53,12 +61,12 @@ bot.on('text', async (ctx) => {
     // Checking if url
     if (RegExp('^(https?:\\/\\/\\S+)').test(mediaUrl)) {
       mediaUrl.trim().split('\n').forEach(url => {
-        ctx.reply('Selam.', Extra.markup(getMarkup(url)))
+        ctx.reply('Selam.', Extra.markup(getMarkup('Link', url)))
       })
     }
     // Not a url
     else {
-      ctx.reply('Zor.', Extra.markup(getMarkup(url)))
+      ctx.reply('Zor.', Extra.markup(getMarkup('Link', url)))
     }
   }
 
@@ -83,10 +91,10 @@ bot.on('text', async (ctx) => {
 const sendMedia = (ctx, mediaUrl) => {
   if (RegExp('^(https?:\\/\\/\\S+)').test(mediaUrl)) {
     try {
-      ctx.replyWithVideo(mediaUrl, Extra.markup(getMarkup(mediaUrl)))
+      ctx.replyWithVideo(mediaUrl, Extra.markup(getMarkup('Link', mediaUrl)))
     } catch (error) {
       console.log(error)
-      ctx.replyWithPhoto(mediaUrl, Extra.markup(getMarkup(mediaUrl)))
+      ctx.replyWithPhoto(mediaUrl, Extra.markup(getMarkup('Link', mediaUrl)))
     }
   }
   // else {

@@ -18,6 +18,16 @@ const getMediaYTDL = async (url) => {
   return ytdl || false
 }
 
+const update = () => {
+  let ytdl
+  try {
+    ytdl = execSync(`youtube-dl -U`, { encoding: 'utf8' }).toString()
+  } catch (err) {
+    // console.log(err)
+  }
+  return ytdl || false
+}
+
 const matchUrl = (url) => {
   let matchedPlugin
   for (let plugin of Object.keys(plugins)) {
@@ -34,4 +44,4 @@ const getMedia = async (url) => {
   } else { return false }
 }
 
-module.exports = { getMedia, getMediaYTDL }
+module.exports = { getMedia, getMediaYTDL, update }
