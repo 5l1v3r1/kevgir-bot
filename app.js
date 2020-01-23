@@ -19,6 +19,12 @@ const getMarkup = (text, value) => {
 bot.on('text', async (ctx) => {
   let mediaUrl, command, url
 
+  // Special commands
+  if (ctx.message.text.startsWith('!')) {
+    handleSpecialCommand(ctx)
+    return
+  }
+
   // Ignore if message has no entities
   if (!ctx.message.hasOwnProperty('entities')) { return }
 
@@ -80,6 +86,31 @@ bot.on('text', async (ctx) => {
   }
 })
 
+const handleSpecialCommand = (ctx) => {
+  const command = ctx.message.text.slice(1)
+  let message = ''
+  let downloadLink = ''
+  let crackLink = ''
+  switch (command) {
+    case 'photoshop':
+      message = 'Photoshop'
+      downloadLink = 'https://prodesigntools.com/prdl-download/Photoshop/66A1D1E00DE44601B041A631261EC584/1507846032938/AdobePhotoshop19-mul_x64.zip'
+      crackLink += 'https://t.me/c/1125644969/75261'
+      break
+    case 'windows':
+      message = 'Windows 10'
+      downloadLink = 'https://tb.rg-adguard.net/public.php'
+      crackLink += 'https://t.me/c/1125644969/70079'
+      break
+    default:
+      break
+  }
+  ctx.reply(message, Extra.markup(Markup.inlineKeyboard([
+    Markup.urlButton('Download', downloadLink),
+    Markup.urlButton('Crack', crackLink),
+    Markup.callbackButton('Sil', 'delete')
+  ])))
+}
 // const sendLocalMedia = (ctx, mediaPath) => {
 //   try {
 //     ctx.replyWithVideo({ source: fs.createReadStream(mediaPath) })
